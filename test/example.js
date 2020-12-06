@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import { dbInit, dropCollections } from '../src/lib/db.js';
+import { dbInit, dbClose, dropCollections } from '../src/lib/db.js';
 import { get, put, post, del } from './util/index.js';
 
 
@@ -9,6 +9,7 @@ before(async () => {
 
 after(async () => {
     await dropCollections();
+    await dbClose();
 });
 
 describe('/test GET', () => {

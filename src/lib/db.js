@@ -3,26 +3,40 @@ const { MongoClient } = mongodb;
 
 export let db;      // import this to access database
 
+let dbClient;
+
 export function dbInit() {
     const { DB_URL, DB_NAME, DB_USERNAME, DB_PASSWORD } = process.env;
     const url = `mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_URL}/${DB_NAME}`;
 
-    const dbClient = new MongoClient(url, {useUnifiedTopology: true});
+    dbClient = new MongoClient(url, {useUnifiedTopology: true});
 
     return new Promise((resolve, reject) => {
         dbClient.connect(err => {
             if (err) reject(err);
             db = dbClient.db(DB_NAME);
-            if (process.env.TESTING === 'true') dropCollections(resolve);
             resolve();
         })
     });
 }
 
+export async function dbClose() {
+    await dbClient.close();
+    return;
+}
+
 export async function dropCollections() {
     const dbCollections = await db.listCollections().toArray();
     
-    dbCollections.forEach(item => {
-            db.collection(item).drop();
+    const drop = dbCollections.map(item => {
+        return async () => {
+            await db.collection(item).drop();
+            return;
+        };
     });
+
+    await Promise.all(drop);
+
+    return;
 }
+
