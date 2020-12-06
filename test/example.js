@@ -8,6 +8,7 @@ const { ObjectID } = mongo;
 
 before(async () => {
     await dbInit();
+    await dropCollections();
 });
 
 after(async () => {
@@ -27,10 +28,10 @@ describe('/test GET', () => {
 });
 
 describe('/test POST', () => {
-    let users;
+    let testing;
 
     before(() => {
-        users = db.collection('test');
+        testing = db.collection('testing');
     });
 
     it('should insert a document and return its id', async () => {
@@ -43,7 +44,7 @@ describe('/test POST', () => {
         expect(typeof json.id).to.equal('string');
         
         const _id = new ObjectID(json.id);        
-        const user = await users.findOne({_id});
+        const user = await testing.findOne({_id});
 
         expect(user.name).to.equal(doc.name);
     });
