@@ -1,0 +1,1221 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Anchorplaces",
+        "version": "1.0.0",
+        "description": "API for anchorplaces.net, a website for sharing anchorages."
+    },
+    "paths": {
+        "/anchorplaces": {
+            "summary": "Path used to manage the list of anchorplaces.",
+            "description": "The REST endpoint/path used to list and create zero or more `anchorplace` entities.  This path contains a `GET` and `POST` operation to perform the list and create tasks, respectively.",
+            "get": {
+                "tags": [
+                    "Anchorplaces"
+                ],
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "description": "limits the number of items to fetch",
+                        "schema": {},
+                        "in": "query"
+                    },
+                    {
+                        "name": "offset",
+                        "description": "an offset for the limit to enable pagination",
+                        "schema": {},
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/anchorplace"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Successful response - returns an array of `anchorplace` entities."
+                    }
+                },
+                "operationId": "getanchorplaces",
+                "summary": "List All anchorplaces",
+                "description": "Gets a list of all `anchorplace` entities."
+            },
+            "post": {
+                "requestBody": {
+                    "description": "A new `anchorplace` to be created.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/anchorplace"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Anchorplaces"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful response."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/validationError"
+                                }
+                            }
+                        },
+                        "description": "Validation failed"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "createanchorplace",
+                "summary": "Create an anchorplace",
+                "description": "Creates a new instance of an `anchorplace`."
+            }
+        },
+        "/anchorplaces/{anchorplaceId}": {
+            "summary": "Path used to manage a single anchorplace.",
+            "description": "The REST endpoint/path used to get, update, and delete single instances of an `anchorplace`.  This path contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and delete tasks, respectively.",
+            "get": {
+                "tags": [
+                    "Anchorplaces"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/anchorplace"
+                                }
+                            }
+                        },
+                        "description": "Successful response - returns a single `anchorplace`."
+                    },
+                    "404": {
+                        "description": "Anchorplace not found"
+                    }
+                },
+                "operationId": "getanchorplace",
+                "summary": "Get an anchorplace",
+                "description": "Gets the details of a single instance of an `anchorplace`."
+            },
+            "put": {
+                "requestBody": {
+                    "description": "Updated `anchorplace` information.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/anchorplace"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Anchorplaces"
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Successful response."
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "anchorplace not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "updateanchorplace",
+                "summary": "Update an anchorplace",
+                "description": "Updates an existing `anchorplace`."
+            },
+            "delete": {
+                "tags": [
+                    "Anchorplaces"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful response."
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "anchorplace not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "deleteanchorplace",
+                "summary": "Delete an anchorplace",
+                "description": "Deletes an existing `anchorplace`."
+            },
+            "parameters": [
+                {
+                    "name": "anchorplaceId",
+                    "description": "A unique identifier for an `anchorplace`.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/user/{userId}": {
+            "summary": "Path used to manage a single user.",
+            "description": "The REST endpoint/path used to get `user` details. Will return anchorplaces, comments and votes.",
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/user"
+                                }
+                            }
+                        },
+                        "description": "Successful response - returns a single `user`."
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "operationId": "getuser",
+                "summary": "Get an user",
+                "description": "Gets the details of an `user`."
+            },
+            "parameters": [
+                {
+                    "name": "userId",
+                    "description": "A unique identifier for an `user`.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/user/login": {
+            "summary": "Path used to login an user.",
+            "description": "The REST endpoint/path used to login a `user`.  This path contains a `POST` operation to login a user.",
+            "post": {
+                "requestBody": {
+                    "description": "Login with `name` and `password`",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/loginUser"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/login"
+                    },
+                    "400": {
+                        "description": "Username and or password wrong"
+                    }
+                },
+                "operationId": "loginuser",
+                "summary": "Login user"
+            }
+        },
+        "/user/logout": {
+            "summary": "Path used to logout an user.",
+            "description": "The REST endpoint/path used to logout a `user`.  This path contains a `POST` operation to logout a user.",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/loginSuccess"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Logout successful"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "logoutuser",
+                "summary": "Logout user"
+            }
+        },
+        "/user": {
+            "summary": "Path used to manage users.",
+            "description": "The REST endpoint/path used to register an `user`.  This path contains a `POST` operation to create an user.",
+            "put": {
+                "requestBody": {
+                    "description": "Updated `user` information.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateUser"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "202": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/loginSuccess"
+                                }
+                            }
+                        },
+                        "description": "Successful response."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/validationError"
+                                }
+                            }
+                        },
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "updateuser",
+                "summary": "Update user",
+                "description": "Updates an existing `user`."
+            },
+            "post": {
+                "requestBody": {
+                    "description": "A new `user` to be created.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/newUser"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/loginSuccess"
+                                }
+                            }
+                        },
+                        "description": "Successful response."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/validationError"
+                                }
+                            }
+                        },
+                        "description": "Validation failed or username exists"
+                    }
+                },
+                "operationId": "createuser",
+                "summary": "Create a new user",
+                "description": "Registers a new `user`."
+            }
+        },
+        "/image/": {
+            "summary": "Path used to upload images",
+            "description": "This REST path is used to upload images of anchorages. It contains a `POST` to upload and create an image.",
+            "post": {
+                "requestBody": {
+                    "description": "Image File",
+                    "content": {
+                        "multipart/form-data": {}
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Image"
+                ],
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/image"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "summary": "Upload image"
+            }
+        },
+        "/image/{imageId}": {
+            "summary": "Path used to manage images",
+            "description": "This REST path is used to get, update and delete images.",
+            "get": {
+                "tags": [
+                    "Image"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/image"
+                    },
+                    "404": {
+                        "description": "Image not found"
+                    }
+                },
+                "summary": "Get image",
+                "description": "Gets the details of an image"
+            },
+            "put": {
+                "requestBody": {
+                    "description": "Updated Image",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/image"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Image"
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Image update successful"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "Image not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "summary": "Update details of an image"
+            },
+            "delete": {
+                "tags": [
+                    "Image"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete image successful"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "Image not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "summary": "Delete image"
+            },
+            "parameters": [
+                {
+                    "name": "imageId",
+                    "description": "A unique identifier for an `image`.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/vote/{objectId}": {
+            "summary": "Path used for voting system.",
+            "description": "This path enables to vote on all IDs in the api.\nFor example: `userId`, `imageId`, `commentId`.",
+            "get": {
+                "tags": [
+                    "Votes"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/vote"
+                    },
+                    "404": {
+                        "description": "ObjectId not found"
+                    }
+                },
+                "summary": "Get sum of all votes"
+            },
+            "post": {
+                "requestBody": {
+                    "description": "Up or down vote",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "upvote": {
+                                    "value": {
+                                        "vote": 1
+                                    }
+                                },
+                                "downvote": {
+                                    "value": {
+                                        "vote": -1
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Votes"
+                ],
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/vote"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "ObjectId not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "summary": "Used to up or down vote."
+            },
+            "delete": {
+                "tags": [
+                    "Votes"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/vote"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "Vote not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "summary": "Delete up or down vote."
+            },
+            "parameters": [
+                {
+                    "name": "objectId",
+                    "description": "A unique identifier for an `object` vote. Can be any Id e.g. imageId, userId, commentId.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/comments/{objectId}": {
+            "summary": "Path used to manage comments",
+            "description": "This path enables to comment on all IDs in the api.\nFor example: `userId`, `imageId`, `commentId`.",
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "default": {
+                                "value": "8"
+                            }
+                        },
+                        "name": "limit",
+                        "description": "limit the number of comments in a single thread",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "default": {
+                                "value": "3"
+                            }
+                        },
+                        "name": "depth",
+                        "description": "limits the depth of replies",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/comment"
+                                }
+                            }
+                        },
+                        "description": "Successful response - returns a tree of `comments`."
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                },
+                "operationId": "getcomment",
+                "summary": "Get tree of comments",
+                "description": "Gets the tree of comments. Accepts a limit and max depth."
+            },
+            "put": {
+                "requestBody": {
+                    "description": "Updated `comment` information.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "comment": {
+                                    "value": {
+                                        "comment": "Even more nice features here!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Comments"
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Successful response."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/validationError"
+                                }
+                            }
+                        },
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "updatecomment",
+                "summary": "Update a comment",
+                "description": "Updates an existing `comment`."
+            },
+            "post": {
+                "requestBody": {
+                    "description": "A new `comment` to be created.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "examples": {
+                                "comment": {
+                                    "value": {
+                                        "comment": "Nice features here!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Comments"
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "commentId": {
+                                        "value": {
+                                            "commentId": "##Hash##"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Successful response."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/validationError"
+                                }
+                            }
+                        },
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "ObjectId not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "createcomment",
+                "summary": "Create a comment",
+                "description": "Creates a new instance of a `comment`."
+            },
+            "delete": {
+                "tags": [
+                    "Comments"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful response."
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "SessionId": []
+                    }
+                ],
+                "operationId": "deletecomment",
+                "summary": "Delete a comment",
+                "description": "Deletes an existing `comment`."
+            },
+            "parameters": [
+                {
+                    "name": "objectId",
+                    "description": "A unique identifier of the item commented.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        }
+    },
+    "components": {
+        "schemas": {
+            "user": {
+                "title": "Root Type for user",
+                "description": "for user registration and authentication",
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "name": "username"
+                }
+            },
+            "anchorplace": {
+                "title": "Root Type for anchorplace",
+                "description": "anchorages created by users",
+                "required": [
+                    "name",
+                    "longitude",
+                    "latitude",
+                    "description",
+                    "depth"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "string"
+                    },
+                    "longitude": {
+                        "type": "string"
+                    },
+                    "depth": {
+                        "type": "string"
+                    },
+                    "ground": {
+                        "type": "string"
+                    },
+                    "shelter": {
+                        "type": "object",
+                        "properties": {
+                            "east": {
+                                "type": "string"
+                            },
+                            "north": {
+                                "type": "string"
+                            },
+                            "north_east": {
+                                "type": "string"
+                            },
+                            "north_west": {
+                                "type": "string"
+                            },
+                            "south": {
+                                "type": "string"
+                            },
+                            "south_east": {
+                                "type": "string"
+                            },
+                            "south_west": {
+                                "type": "string"
+                            },
+                            "west": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "services": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "available": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "images": {
+                        "description": "",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/image"
+                        }
+                    }
+                },
+                "example": {
+                    "name": "String",
+                    "description": "String",
+                    "latitude": "Float",
+                    "longitude": "Float",
+                    "depth": "Int",
+                    "ground": "String",
+                    "images": [],
+                    "shelter": {
+                        "east": "Bool",
+                        "north": "Bool",
+                        "north_east": "Bool",
+                        "north_west": "Bool",
+                        "south": "Bool",
+                        "south_east": "Bool",
+                        "south_west": "Bool",
+                        "west": "Bool"
+                    },
+                    "services": [
+                        {
+                            "name": "Diesel",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Gas",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Water",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Boat repair",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Engine repair",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Sailmaker",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Moorings",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Shower",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Cafes",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Restaurants",
+                            "available": "Bool"
+                        },
+                        {
+                            "name": "Supermarket",
+                            "available": "Bool"
+                        }
+                    ]
+                }
+            },
+            "newUser": {
+                "title": "Root Type for newUser",
+                "description": "needed for registering a new user",
+                "type": "object",
+                "allOf": [
+                    {
+                        "required": [
+                            "email",
+                            "password"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "password": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "$ref": "#/components/schemas/user"
+                    }
+                ],
+                "example": {
+                    "name": "username",
+                    "password": "asdASD123",
+                    "email": "asd@asd.net"
+                }
+            },
+            "loginUser": {
+                "title": "Root Type for loginUser",
+                "description": "needed to login a user",
+                "type": "object",
+                "allOf": [
+                    {
+                        "required": [
+                            "password"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "password": {
+                                "description": "",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "$ref": "#/components/schemas/user"
+                    }
+                ],
+                "example": {
+                    "name": "username",
+                    "password": "asdASD123"
+                }
+            },
+            "loginSuccess": {
+                "title": "Root Type for loginsuccess",
+                "description": "login successful",
+                "type": "object",
+                "properties": {
+                    "sessionId": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "sessionId": "##Hash##"
+                }
+            },
+            "updateUser": {
+                "title": "Root Type for updateUser",
+                "description": "for a new password the old one is required",
+                "required": [
+                    "newPassword",
+                    "oldPassword"
+                ],
+                "type": "object",
+                "properties": {
+                    "oldPassword": {
+                        "type": "string"
+                    },
+                    "newPassword": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "oldPassword": "oldPassword",
+                    "newPassword": "newPassword"
+                }
+            },
+            "validationError": {
+                "title": "Root Type for validationError",
+                "description": "validation error and/or bad input",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "error": "specific validation error"
+                }
+            },
+            "image": {
+                "title": "Root Type for image",
+                "description": "image of an anchorage",
+                "type": "object",
+                "properties": {
+                    "imageId": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "desc": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "imageId": "##Hash##",
+                    "title": "Anchorage",
+                    "desc": "a short description of the image",
+                    "url": "images/image.webp",
+                    "author": "user123"
+                }
+            },
+            "votes": {
+                "title": "Root Type for votes",
+                "description": "Vote object with sum of all votes.",
+                "type": "object",
+                "properties": {
+                    "objectId": {
+                        "type": "string"
+                    },
+                    "sum": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "objectId": "##Hash##",
+                    "sum": "1"
+                }
+            },
+            "comment": {
+                "title": "Root Type for comment",
+                "description": "Used to comment and reply on any objectId like anchorplaceId, imageId, commentId.",
+                "required": [],
+                "type": "object",
+                "properties": {
+                    "commentId": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "comment": {
+                        "type": "string"
+                    },
+                    "created": {
+                        "type": "string"
+                    },
+                    "edited": {
+                        "type": "string"
+                    },
+                    "replies": {
+                        "description": "",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/comment"
+                        }
+                    }
+                },
+                "example": {
+                    "commentId": "##Hash##",
+                    "userId": "##Hash##",
+                    "author": "user123",
+                    "comment": "Nice features here!",
+                    "created": "Date",
+                    "edited": "Date",
+                    "replies": []
+                }
+            }
+        },
+        "responses": {
+            "login": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/loginSuccess"
+                        }
+                    }
+                },
+                "description": "Login response with `sessionId`"
+            },
+            "image": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/image"
+                        }
+                    }
+                },
+                "description": "Upload or editing image"
+            },
+            "vote": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/votes"
+                        }
+                    }
+                },
+                "description": "Response with vote object"
+            }
+        },
+        "securitySchemes": {
+            "SessionId": {
+                "type": "apiKey",
+                "description": "User has to provide a valid sessionId",
+                "name": "sessionId",
+                "in": "query"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "User",
+            "description": "User registration and login"
+        },
+        {
+            "name": "Image",
+            "description": "Image upload and managing"
+        },
+        {
+            "name": "Anchorplaces",
+            "description": "Routes for anchorages"
+        },
+        {
+            "name": "Votes",
+            "description": "Voting system reddit style"
+        },
+        {
+            "name": "Comments",
+            "description": ""
+        }
+    ]
+}
