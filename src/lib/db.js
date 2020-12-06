@@ -22,7 +22,6 @@ export function dbInit() {
 
 export async function dbClose() {
     await dbClient.close();
-    return;
 }
 
 export async function dropCollections() {
@@ -31,12 +30,9 @@ export async function dropCollections() {
     const drop = dbCollections.map(item => {
         return async () => {
             await db.collection(item).drop();
-            return;
         };
     });
 
     await Promise.all(drop);
-
-    return;
 }
 
