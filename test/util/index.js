@@ -45,7 +45,9 @@ export async function del(route) {
 function parse(res) {
     try {
         res.json = JSON.parse(res.text);
-    } catch {}
+    } catch {
+        res.json = {};
+    }
 
     return {
         json: res.json, 

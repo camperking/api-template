@@ -1,8 +1,10 @@
 import chai from 'chai';
-import { dbInit, dbClose, dropCollections } from '../src/lib/db.js';
+import mongo from 'mongodb';
+import { dbInit, dbClose, dropCollections, db } from '../src/lib/db.js';
 import { get, put, post, del } from './util/index.js';
 
 const { expect } = chai;
+const { ObjectID } = mongo;
 
 before(async () => {
     await dbInit();
@@ -25,14 +27,26 @@ describe('/test GET', () => {
 });
 
 describe('/test POST', () => {
+    let users;
+
+    before(() => {
+        users = db.collection('test');
+    });
 
     it('should insert a document and return its id', async () => {
+
         const doc = { name: 'teapot' };
 
         const { status, json } = await post('/test', doc);
 
         expect(status).to.equal(201);
-        expect(json.sessionId).to.exist();
+        expect(typeof json.id).to.equal('string');
+        
+        const _id = new ObjectID(json.id);        
+        const user = await users.findOne({_id});
+
+        expect(user.name).to.equal(doc.name);
     });
+
 
 });
