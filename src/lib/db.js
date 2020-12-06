@@ -28,9 +28,7 @@ export async function dropCollections() {
     const dbCollections = await db.listCollections().toArray();
     
     const drop = dbCollections.map(item => {
-        return async () => {
-            await db.collection(item).drop();
-        };
+        return db.collection(item.name).drop();
     });
 
     await Promise.all(drop);
